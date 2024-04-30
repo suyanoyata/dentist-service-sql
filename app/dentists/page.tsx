@@ -2,20 +2,22 @@ import SidebarSelect from "@/components/app-components/SidebarSelect.component";
 import { Text } from "@/components/app-components/typography";
 import PatientsTable from "@/components/app-components/PatientsTable";
 import { routes } from "@/constants/sidebar.routes";
+import axios from "axios";
 
-// type Patient = {
-//   patient_id: number;
-//   full_name: string;
-//   date_of_birth: Date;
-//   diagnosis: string;
-// };
+export default async function Page() {
+  const selected = 1;
 
-export default async function Home() {
-  const selected = 0;
+  // -- feat: add card where will be displayed count of new patients compared to previous month
+
+  const dentists = await axios
+    .get("http://localhost:3001/dentists")
+    .then((response) => {
+      return response.data;
+    });
 
   return (
     <main className="flex flex-row bg-[#f6f6f6]">
-      <div className="w-[300px] h-screen bg-white overflow-y-scroll border-r hidden md:block">
+      <div className="w-[200px] h-screen bg-white overflow-y-scroll border-r hidden md:block">
         {routes.map((route, index) => (
           <SidebarSelect
             key={route.select}
