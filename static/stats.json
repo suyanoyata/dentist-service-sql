@@ -1,0 +1,15 @@
+{
+  "this_month": {
+    "list": [],
+    "count": 8,
+    "previous": 6,
+    "percent_difference": 75
+  },
+  "this_week_visits_left": 0,
+  "stats_count": {
+    "patients": 16,
+    "dentists": 4,
+    "visits": 20,
+    "this_month_visits": 15
+  }
+}

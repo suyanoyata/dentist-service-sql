@@ -1,59 +1,60 @@
-"use client";
+"use client"
 
-import React, { ReactElement, useEffect, useState } from "react";
-import { TableCell } from "../ui/table";
-import { Pen } from "lucide-react";
-import axios from "axios";
-import { useTableLoadingStore } from "@/hooks/tableLoading.hook";
-import { Text } from "../app-components/typography";
+import React, { ReactElement, useEffect, useState } from "react"
+import { TableCell } from "../ui/table"
+import { Pen } from "lucide-react"
+import { useTableLoadingStore } from "@/hooks/tableLoading.hook"
+import { Text } from "../app-components/typography"
+import { api } from "@/lib/axios"
+import { api_routes } from "@/constants/app.routes"
 
 export const EditableCell = ({
   children,
   overall,
 }: {
-  children: string | number;
-  overall: any;
+  children: string | number
+  overall: any
 }) => {
-  const [text, setText] = useState<string | number>(children);
-  const [newText, setNewText] = useState<string | number>(children);
+  const [text, setText] = useState<string | number>(children)
+  const [newText, setNewText] = useState<string | number>(children)
 
-  const [saving, setSaving] = useState<boolean>(false);
-  const [editing, setEditing] = useState<boolean>(false);
+  const [saving, setSaving] = useState<boolean>(false)
+  const [editing, setEditing] = useState<boolean>(false)
 
-  const store: any = useTableLoadingStore();
+  const store: any = useTableLoadingStore()
 
   useEffect(() => {
     if (saving) {
-      store.setLoading();
-      axios
-        .post(`http://localhost:3001/patients/update/${overall.patient_id}`, {
+      store.setLoading()
+      api
+        .post(api_routes.update_patient_id(overall.patient_id), {
           full_name: newText.toString().trim(),
         })
         .then(() => {
-          store.notLoading();
-          setSaving(false);
-          setText(newText);
-        });
+          store.notLoading()
+          setSaving(false)
+          setText(newText)
+        })
     }
-  }, [saving]);
+  }, [saving])
 
   const keydownEvent = (event: any) => {
     if (event.key.toLowerCase() === "enter") {
-      setEditing(false);
-      setSaving(true);
-      return;
+      setEditing(false)
+      setSaving(true)
+      return
     }
 
     if (event.key.toLowerCase() === "escape") {
-      setEditing(false);
-      setNewText(text);
-      return;
+      setEditing(false)
+      setNewText(text)
+      return
     }
-  };
+  }
 
   const Children = (): ReactElement => {
     if (!editing) {
-      return <Text>{text}</Text>;
+      return <Text>{text}</Text>
     } else {
       return (
         <input
@@ -61,26 +62,26 @@ export const EditableCell = ({
           autoFocus
           onKeyDown={keydownEvent}
           onBlur={() => {
-            setNewText(text);
-            setEditing(false);
+            setNewText(text)
+            setEditing(false)
           }}
           onChange={(event) => {
-            setNewText(event.target.value);
+            setNewText(event.target.value)
           }}
           value={newText}
         />
-      );
+      )
     }
-  };
+  }
 
   return (
     <TableCell
       onClick={() => {
-        setEditing(true);
+        setEditing(true)
       }}
-      className="flex flex-row items-center gap-2 hover:underline cursor-default"
+      className="flex flex-row items-center gap-2 hover:underline cursor-default text-nowrap"
     >
       <Children /> <Pen size={12} strokeWidth={2.75} />
     </TableCell>
-  );
-};
+  )
+}

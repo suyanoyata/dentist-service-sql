@@ -1,0 +1,18 @@
+[
+  {
+    "patient_id": 2,
+    "full_name": "Андрій Олегович",
+    "date_of_birth": "2024-04-09T00:00:00.000Z",
+    "joined": "2024-04-30T14:09:42.875Z",
+    "record_id": 1,
+    "diagnosis": "Карієс"
+  },
+  {
+    "patient_id": 3,
+    "full_name": "Степан",
+    "date_of_birth": "2004-04-15T00:00:00.000Z",
+    "joined": "2024-04-30T14:09:42.875Z",
+    "record_id": 2,
+    "diagnosis": "Карієс"
+  }
+]
