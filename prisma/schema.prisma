@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model dentists {
+  dentist_id   Int      @id @default(autoincrement())
+  full_name    String   @db.VarChar(255)
+  phone_number String
+  visits       visits[]
+}
+
+model medical_records {
+  record_id  Int      @id @default(autoincrement())
+  patient_id Int
+  diagnosis  String   @db.VarChar(255)
+  patients   patients @relation(fields: [patient_id], references: [patient_id], onUpdate: Restrict, map: "Привязка картки до пацієнта")
+
+  @@index([patient_id], map: "Привязка картки до пацієнта")
+}
+
+model patients {
+  patient_id      Int               @id @default(autoincrement())
+  full_name       String            @db.VarChar(255)
+  date_of_birth   DateTime          @db.Date
+  joined          DateTime          @default(now())
+  medical_records medical_records[]
+  visits          visits[]
+}
+
+model visits {
+  visit_id     Int                 @id @default(autoincrement())
+  patient_id   Int
+  dentist_id   Int
+  visit_date   DateTime            @db.Date
+  visit_status visits_visit_status
+  dentists     dentists            @relation(fields: [dentist_id], references: [dentist_id], onUpdate: Restrict, map: "Привязка лікаря до візиту")
+  patients     patients            @relation(fields: [patient_id], references: [patient_id], onUpdate: Restrict, map: "Привязка пацієнта")
+
+  @@index([dentist_id], map: "Привязка лікаря до візиту")
+  @@index([patient_id], map: "Привязка пацієнта")
+}
+
+enum visits_visit_status {
+  planned   @map("запланований")
+  finished  @map("завершений")
+  cancelled @map("відмінений")
+}
